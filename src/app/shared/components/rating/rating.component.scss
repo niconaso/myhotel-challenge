@@ -1,0 +1,17 @@
+.rating {
+  max-width: 100px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &--disabled {
+    opacity: 0.1;
+  }
+
+  &__star {
+    font-size: 1rem;
+  }
+
+  &__summary {
+  }
+}

@@ -1,0 +1,11 @@
+<ul class="rating d-flex align-items-center justify-content-between" [ngClass]="{'rating--disabled': disabled}">
+  <li
+    *ngFor="let star of stars; let i = index"
+    class="rating__star"
+    [ngClass]="{'rating__start--active': i < activeStars}"
+    (click)="onStarClick(star)"
+  >
+    star
+  </li>
+</ul>
+<div class="rating__summary">{{activeStars}} of {{stars.length}}</div>
