@@ -1,7 +1,7 @@
 export interface Review {
   id?: number;
   name: string;
-  description: string;
+  comments: string;
   rating: number;
-  createdDate: Date;
+  createdAt: Date | number;
 }

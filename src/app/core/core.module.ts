@@ -1,8 +1,10 @@
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 
+const MODULES: any[] = [HttpClientModule];
+
 @NgModule({
-  declarations: [],
-  imports: [],
+  imports: [...MODULES],
 })
 export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {

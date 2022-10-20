@@ -6,8 +6,11 @@
 
 <div class="row">
   <div class="col">
-    <table>
+   <!--  <table>
 
-    </table>
+    </table> -->
+    <ng-container *ngFor="let review of reviews$ | async">
+      {{review | json}}
+    </ng-container>
   </div>
 </div>
