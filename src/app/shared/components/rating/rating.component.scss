@@ -1,17 +1,28 @@
+:host {
+  display: block;
+  --rating-star-color: #e7b23b;
+}
+
 .rating {
-  max-width: 100px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
+  display: flex;
 
   &--disabled {
     opacity: 0.1;
   }
 
+  &__stars {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
   &__star {
     font-size: 1rem;
+    color: var(--rating-star-color);
   }
 
   &__summary {
+    font-size: .9rem;
+    margin-left: 0.5rem;
   }
 }
