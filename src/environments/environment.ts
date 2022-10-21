@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   endpoints: {
-    url: 'http://localhost:3000',
+    url: '/api',
     timeout: 30000,
   },
 };

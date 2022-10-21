@@ -17,6 +17,11 @@ export class ReviewService {
    */
   private readonly _endpoint: string = `${environment.endpoints.url}/reviews`;
 
+  /**
+   * Creates an instance of ReviewService.
+   * @param {HttpClient} _http
+   * @memberof ReviewService
+   */
   constructor(private readonly _http: HttpClient) {}
 
   /**
@@ -29,8 +34,8 @@ export class ReviewService {
   create(review: Review): Observable<Review> {
     const newReview: Review = {
       ...review,
-      createdAt: new Date().getTime()
-    }
+      createdAt: new Date().getTime(),
+    };
     return this._http.post<Review>(this._endpoint, newReview);
   }
 
