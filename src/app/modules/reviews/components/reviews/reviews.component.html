@@ -1,50 +1,68 @@
 <div class="row justify-content-end">
   <div class="col-auto">
-    <button type="button" mat-flat-button color="primary" appAddReview>Add Review</button>
+    <button type="button" mat-flat-button color="primary" appCreateOrEditReview>Add Review</button>
   </div>
 </div>
 
 
-<table mat-table [dataSource]="dataSource" matSort class="table-responsive w-100 mt-4">
+<mat-table [dataSource]="dataSource" matSort class="table-responsive w-100 mt-4">
   <!-- Id Column -->
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Id. </th>
-    <td mat-cell *matCellDef="let review"> {{review.id}} </td>
+  <ng-container matColumnDef="number">
+    <mat-header-cell *matHeaderCellDef> Nº. </mat-header-cell>
+    <mat-cell *matCellDef="let i = index"> {{i+1}} </mat-cell>
   </ng-container>
 
   <!-- FirstName Column -->
   <ng-container matColumnDef="firstName">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> FirstName </th>
-    <td mat-cell *matCellDef="let review"> {{review.firstName}} </td>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> FirstName </mat-header-cell>
+    <mat-cell *matCellDef="let review"> {{review.firstName}} </mat-cell>
   </ng-container>
 
   <!-- LastName Column -->
   <ng-container matColumnDef="lastName">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> LastName </th>
-    <td mat-cell *matCellDef="let review"> {{review.lastName}} </td>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> LastName </mat-header-cell>
+    <mat-cell *matCellDef="let review"> {{review.lastName}} </mat-cell>
   </ng-container>
+
+  <!-- Email Column -->
+  <ng-container matColumnDef="email">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+    <mat-cell *matCellDef="let review"> {{review.email}} </mat-cell>
+  </ng-container>
+
 
   <!-- Comments Column -->
   <ng-container matColumnDef="comments">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Comments </th>
-    <td mat-cell *matCellDef="let review"> {{review.comments}} </td>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Comments </mat-header-cell>
+    <mat-cell *matCellDef="let review"> {{review.comments}} </mat-cell>
   </ng-container>
 
   <!-- Rating Column -->
   <ng-container matColumnDef="rating">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Rating </th>
-    <td mat-cell *matCellDef="let review">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Rating </mat-header-cell>
+    <mat-cell *matCellDef="let review">
       <app-rating-emoji [rating]="review.rating"></app-rating-emoji>
-    </td>
+    </mat-cell>
   </ng-container>
-
 
   <!-- CreatedAt Column -->
   <ng-container matColumnDef="createdAt">
-    <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
-    <td mat-cell *matCellDef="let review"> {{review.createdAt | date:dateFormat}} </td>
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Created At </mat-header-cell>
+    <mat-cell *matCellDef="let review"> {{review.createdAt | date:dateFormat}} </mat-cell>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-</table>
+  <!-- Actions Column -->
+  <ng-container matColumnDef="actions">
+    <mat-header-cell *matHeaderCellDef> Actions </mat-header-cell>
+    <mat-cell *matCellDef="let review">
+      <button type="button" mat-icon-button color="secondary" appCreateOrEditReview [review]="review">
+        <mat-icon>
+          edit
+        </mat-icon>
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+</mat-table>

@@ -1,1 +1,1 @@
-export * from './add-review.directive';
+export * from './create-or-edit-review.directive';

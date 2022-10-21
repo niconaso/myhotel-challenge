@@ -1,31 +1,33 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Review } from '@modules/reviews/models';
 import { ReviewService } from '@modules/reviews/services';
 import { EmailValidators } from 'ngx-validators';
 import { Subscription } from 'rxjs';
+import { CreateOrUpdateReviewData } from './create-or-update-review.interface';
 
 @Component({
-  selector: 'app-add-review',
-  templateUrl: './add-review.component.html',
-  styleUrls: ['./add-review.component.scss'],
+  selector: 'create-or-update-review',
+  templateUrl: './create-or-update-review.component.html',
+  styleUrls: ['./create-or-update-review.component.scss'],
 })
-export class AddReviewComponent implements OnInit, OnDestroy {
+export class CreateOrUpdateReviewComponent implements OnInit, OnDestroy {
   reviewForm!: FormGroup;
 
   private _subscriptions: Subscription = Subscription.EMPTY;
 
   /**
-   * Creates an instance of AddReviewComponent.
+   * Creates an instance of CreateOrUpdateReviewComponent.
    * @param {FormBuilder} _fb
-   * @param {MatDialogRef<AddReviewComponent>} _matDialogRef
-   * @memberof AddReviewComponent
+   * @param {MatDialogRef<CreateOrUpdateReviewComponent>} _matDialogRef
+   * @memberof CreateOrUpdateReviewComponent
    */
   constructor(
     private readonly _fb: FormBuilder,
-    private readonly _matDialogRef: MatDialogRef<AddReviewComponent>,
-    private readonly _reviewService: ReviewService
+    private readonly _matDialogRef: MatDialogRef<CreateOrUpdateReviewComponent>,
+    private readonly _reviewService: ReviewService,
+    @Inject(MAT_DIALOG_DATA) public data: CreateOrUpdateReviewData
   ) {}
 
   ngOnInit(): void {
@@ -35,7 +37,7 @@ export class AddReviewComponent implements OnInit, OnDestroy {
   /**
    * Unsubscribe from all the observable to avoid memory leaks.
    *
-   * @memberof AddReviewComponent
+   * @memberof CreateOrUpdateReviewComponent
    */
   ngOnDestroy(): void {
     this._subscriptions.unsubscribe();
@@ -46,11 +48,14 @@ export class AddReviewComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const review: Review = form.value;
+    const review: Review = {
+      ...this.data?.review,
+      ...form.value,
+    };
 
     this._subscriptions.add(
       this._reviewService
-        .create(review)
+        .createOrUpdate(review)
         .subscribe(() => this._matDialogRef.close())
     );
   }
@@ -66,5 +71,12 @@ export class AddReviewComponent implements OnInit, OnDestroy {
       comments: this._fb.control('', []),
       rating: this._fb.control(0, []),
     });
+
+    if (this.data) {
+      this.reviewForm.patchValue({
+        ...this.data.review,
+      });
+      this.reviewForm.updateValueAndValidity();
+    }
   }
 }

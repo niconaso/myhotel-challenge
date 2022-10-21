@@ -21,12 +21,14 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   displayedColumns: string[] = [
-    'id',
+    'number',
     'firstName',
     'lastName',
+    'email',
     'comments',
     'rating',
     'createdAt',
+    'actions',
   ];
 
   dataSource: MatTableDataSource<Review> = new MatTableDataSource<Review>();
@@ -34,16 +36,22 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private subscriptions: Subscription = Subscription.EMPTY;
 
-  ngAfterViewInit() {
-    this.dataSource.sort = this.sort;
-  }
-
+  /**
+   * Creates an instance of ReviewsComponent.
+   * @param {ReviewService} _reviewService
+   * @memberof ReviewsComponent
+   */
   constructor(private readonly _reviewService: ReviewService) {}
 
   ngOnInit(): void {
+    // TODO: find a better way to update the DataSource.
     this._reviewService.getAll().subscribe((reviews) => {
       this.dataSource.data = reviews;
     });
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
   }
 
   ngOnDestroy(): void {

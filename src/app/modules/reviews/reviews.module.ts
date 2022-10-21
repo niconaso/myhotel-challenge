@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { ComponentsModule } from '@shared/components/components.module';
 import { SharedModule } from '@shared/shared.module';
-import { AddReviewComponent, ReviewsComponent } from './components';
-import { AddReviewDirective } from './directives';
+import { CreateOrUpdateReviewComponent, ReviewsComponent } from './components';
+import { CreateOrEditReviewDirective } from './directives';
 import { ReviewsRoutingModule } from './reviews-routing.module';
 
-const DIRECTIVES: any[] = [AddReviewDirective];
-const COMPONENTS: any[] = [ReviewsComponent, AddReviewComponent];
+const DIRECTIVES: any[] = [CreateOrEditReviewDirective];
+const COMPONENTS: any[] = [ReviewsComponent, CreateOrUpdateReviewComponent];
 const MODULES: any[] = [SharedModule, ReviewsRoutingModule, ComponentsModule];
 
 @NgModule({
