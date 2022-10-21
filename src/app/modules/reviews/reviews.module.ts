@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
-import { ReviewsComponent } from './components';
-import { AddReviewComponent } from './components/add-review/add-review.component';
-import { AddReviewDirective } from './directives/add-review.directive';
+import { AddReviewComponent, ReviewsComponent } from './components';
+import { AddReviewDirective } from './directives';
 import { ReviewsRoutingModule } from './reviews-routing.module';
 
 const DIRECTIVES: any[] = [AddReviewDirective];
