@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ValidatorsModule } from 'ngx-validators';
-import { RatingModule } from './components/rating/rating.module';
+import { ComponentsModule } from './components/components.module';
 import { MaterialModule } from './material.module';
 
 const MODULES: any[] = [
@@ -11,7 +11,6 @@ const MODULES: any[] = [
   ReactiveFormsModule,
   MaterialModule,
   ValidatorsModule,
-  RatingModule,
 ];
 
 @NgModule({

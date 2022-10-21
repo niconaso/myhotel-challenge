@@ -49,12 +49,9 @@ export class AddReviewComponent implements OnInit, OnDestroy {
     const review: Review = form.value;
 
     this._subscriptions.add(
-      this._reviewService.create(review).subscribe(
-        () => {
-          this._matDialogRef.close();
-        },
-        (err) => console.log(err)
-      )
+      this._reviewService
+        .create(review)
+        .subscribe(() => this._matDialogRef.close())
     );
   }
 

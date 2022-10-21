@@ -1,0 +1,39 @@
+:host {
+  display: block;
+
+  &.rating {
+    fa-icon {
+      font-size: 1.6rem;
+    }
+
+    &--worst {
+      fa-icon {
+        color: #ff565f;
+      }
+    }
+
+    &--poor {
+      fa-icon {
+        color: #fd8749;
+      }
+    }
+
+    &--average {
+      fa-icon {
+        color: #fed11c;
+      }
+    }
+
+    &--good {
+      fa-icon {
+        color: #a0d873;
+      }
+    }
+
+    &--excellent {
+      fa-icon {
+        color: #65cb65;
+      }
+    }
+  }
+}

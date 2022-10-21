@@ -25,6 +25,7 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
     'firstName',
     'lastName',
     'comments',
+    'rating',
     'createdAt',
   ];
 
