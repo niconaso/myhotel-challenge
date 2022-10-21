@@ -1,12 +1,16 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {
+  AfterViewInit,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { environment } from '@environment/environment';
 import { Review } from '@modules/reviews/models';
 import { ReviewService } from '@modules/reviews/services';
 import { Subscription } from 'rxjs';
-import { AddReviewComponent } from '../add-review/add-review.component';
 
 @Component({
   selector: 'app-reviews',
@@ -14,9 +18,7 @@ import { AddReviewComponent } from '../add-review/add-review.component';
   styleUrls: ['./reviews.component.scss'],
 })
 export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
-
   @ViewChild(MatSort) sort!: MatSort;
-
 
   displayedColumns: string[] = [
     'id',
@@ -35,10 +37,7 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataSource.sort = this.sort;
   }
 
-  constructor(
-    private readonly _reviewService: ReviewService,
-    private _modalService: MatDialog
-  ) {}
+  constructor(private readonly _reviewService: ReviewService) {}
 
   ngOnInit(): void {
     this._reviewService.getAll().subscribe((reviews) => {
@@ -48,13 +47,5 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-  }
-
-  openReviewModal() {
-    const modalRef = this._modalService.open(AddReviewComponent);
-
-    modalRef.afterClosed().subscribe();
-
-    return modalRef;
   }
 }
