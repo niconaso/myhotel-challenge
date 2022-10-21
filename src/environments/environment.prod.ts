@@ -4,4 +4,5 @@ export const environment = {
     url: '/api',
     timeout: 30000,
   },
+  dateFormat: 'M-dd-YY, h:mm a',
 };

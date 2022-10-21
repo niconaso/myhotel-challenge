@@ -6,11 +6,39 @@
 
 <div class="row">
   <div class="col">
-   <!--  <table>
+    <table mat-table [dataSource]="dataSource" matSort>
+      <!-- Id Column -->
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Id. </th>
+        <td mat-cell *matCellDef="let review"> {{review.id}} </td>
+      </ng-container>
 
-    </table> -->
-    <ng-container *ngFor="let review of reviews$ | async">
-      {{review | json}}
-    </ng-container>
+      <!-- FirstName Column -->
+      <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> FirstName </th>
+        <td mat-cell *matCellDef="let review"> {{review.firstName}} </td>
+      </ng-container>
+
+      <!-- LastName Column -->
+      <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> LastName </th>
+        <td mat-cell *matCellDef="let review"> {{review.lastName}} </td>
+      </ng-container>
+
+      <!-- Comments Column -->
+      <ng-container matColumnDef="comments">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Comments </th>
+        <td mat-cell *matCellDef="let review"> {{review.comments}} </td>
+      </ng-container>
+
+      <!-- CreatedAt Column -->
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
+        <td mat-cell *matCellDef="let review"> {{review.createdAt | date:dateFormat}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </div>
 </div>

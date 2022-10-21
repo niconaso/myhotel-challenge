@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTableModule } from '@angular/material/table';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 const MODULES: any[] = [
   MatToolbarModule,
@@ -11,6 +12,7 @@ const MODULES: any[] = [
   MatIconModule,
   MatTableModule,
   MatDialogModule,
+  MatSortModule,
 ];
 
 @NgModule({
