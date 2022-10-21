@@ -1,5 +1,5 @@
 <div class="rating">
-  <ul class="rating__stars d-flex align-items-center justify-content-between"
+  <ul class="rating__stars"
     [ngClass]="{'rating--disabled': disabled}">
     <li *ngFor="let star of stars; let i = index" class="rating__star" (click)="onStarClick(star)">
       <fa-icon [icon]="['fas','star']" *ngIf="i < activeStars; else emptyStar"></fa-icon>
