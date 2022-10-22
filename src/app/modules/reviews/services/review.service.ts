@@ -2,25 +2,12 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Review } from '@modules/reviews/models';
-import { BehaviorSubject, Observable, of, switchMap, take, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReviewService {
-  /**
-   * BehaviorSubject to manage the reactive states of the Reviews
-   *
-   * @private
-   * @type {BehaviorSubject<Review[]>}
-   * @memberof ReviewService
-   */
-  private _reviewsBS: BehaviorSubject<Review[]> = new BehaviorSubject<Review[]>(
-    []
-  );
-
-  private reviews$: Observable<Review[]> = this._reviewsBS.asObservable();
-
   /**
    * Reviews endpoint
    *
@@ -47,7 +34,7 @@ export class ReviewService {
   createOrUpdate(review: Review): Observable<Review> {
     // If the id is set then update the review
     if (review.id) {
-      return this.update(review);
+      return this.update(review, review.id);
     }
     // Otherwise create a new review
     else {
@@ -64,14 +51,7 @@ export class ReviewService {
    */
   create(review: Review): Observable<Review> {
     // Following the REST practices returns only the update review object
-    return this._http.post<Review>(this._endpoint, review).pipe(
-      // Add new review to the observable
-      tap((createdReview: Review) => {
-        const reviews: Review[] = [...this._reviewsBS.value, createdReview];
-        this._reviewsBS.next(reviews);
-      }),
-      take(1)
-    );
+    return this._http.post<Review>(this._endpoint, review);
   }
 
   /**
@@ -81,10 +61,7 @@ export class ReviewService {
    * @memberof ReviewService
    */
   getAll(): Observable<Review[]> {
-    return this._http.get<Review[]>(this._endpoint).pipe(
-      tap((reviews: Review[]) => this._reviewsBS.next(reviews)),
-      switchMap(() => this.reviews$)
-    );
+    return this._http.get<Review[]>(this._endpoint);
   }
 
   /**
@@ -94,49 +71,22 @@ export class ReviewService {
    * @return {*}  {Observable<Review>}
    * @memberof ReviewService
    */
-  update(review: Review): Observable<Review> {
-    const url: string = `${this._endpoint}/${review.id}`;
+  update(review: Review, id: string | undefined ): Observable<Review> {
+    const url: string = `${this._endpoint}/${id}`;
 
-    return this._http.put<Review>(url, review).pipe(
-      tap((updatedReview: Review) => {
-        const reviews: Review[] = [...this._reviewsBS.value].map(
-          (review: Review) => {
-            if (review.id === updatedReview.id) {
-              review = {
-                ...review,
-                ...updatedReview,
-              };
-            }
-            return review;
-          }
-        );
-
-        this._reviewsBS.next(reviews);
-      })
-    );
+    return this._http.put<Review>(url, review);
   }
 
   /**
    * Delete a review from the "database"
    *
-   * @param {Review} deleteReview
+   * @param {string} id
    * @return {*}  {Observable<Review>}
    * @memberof ReviewService
    */
-  remove(review: Review): Observable<Review> {
-    const { id } = review;
+  remove(id: string | undefined): Observable<Review> {
     const url: string = `${this._endpoint}/${id}`;
 
-    return this._http.delete<Review>(url).pipe(
-      tap(() => {
-        // Remove the review
-        const reviews: Review[] = [...this._reviewsBS.value].filter(
-          (review: Review) => review.id !== id
-        );
-
-        this._reviewsBS.next(reviews);
-      }),
-      take(1)
-    );
+    return this._http.delete<Review>(url);
   }
 }

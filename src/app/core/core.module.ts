@@ -1,7 +1,15 @@
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { NgxsLoggerPluginModule } from '@ngxs/logger-plugin';
+import { NgxsModule } from '@ngxs/store';
 
-const MODULES: any[] = [HttpClientModule];
+const MODULES: any[] = [
+  HttpClientModule,
+  NgxsModule.forRoot(),
+  NgxsReduxDevtoolsPluginModule.forRoot(),
+  NgxsLoggerPluginModule.forRoot(),
+];
 
 @NgModule({
   imports: [...MODULES],

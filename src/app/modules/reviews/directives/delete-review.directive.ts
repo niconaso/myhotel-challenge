@@ -1,11 +1,12 @@
 import { Directive, HostListener, Input } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngxs/store';
 import {
   ConfirmationDialogComponent,
   ConfirmationDialogData,
 } from '@shared/components';
+import { DeleteReview } from '../actions';
 import { Review } from '../models';
-import { ReviewService } from '../services';
 
 @Directive({
   selector: '[appDeleteReview]',
@@ -22,12 +23,12 @@ export class DeleteReviewDirective {
   /**
    * Creates an instance of DeleteReviewDirective.
    * @param {MatDialog} _matDialog
-   * @param {ReviewService} _reviewService
+   * @param {Store} _store
    * @memberof DeleteReviewDirective
    */
   constructor(
     private readonly _matDialog: MatDialog,
-    private readonly _reviewService: ReviewService
+    private readonly _store: Store
   ) {}
 
   @HostListener('click')
@@ -48,6 +49,8 @@ export class DeleteReviewDirective {
   }
 
   private deleteReview() {
-    this._reviewService.remove(this.review).subscribe();
+    const { id } = this.review;
+
+    this._store.dispatch(new DeleteReview(id));
   }
 }

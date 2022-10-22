@@ -4,20 +4,23 @@ import {
   ElementRef,
   OnDestroy,
   OnInit,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { environment } from '@environment/environment';
+import { GetReviews } from '@modules/reviews/actions';
 import { Review } from '@modules/reviews/models';
-import { ReviewService } from '@modules/reviews/services';
+import { ReviewState } from '@modules/reviews/states';
+import { Select, Store } from '@ngxs/store';
 import {
   debounceTime,
   distinctUntilChanged,
   fromEvent,
   map,
-  Subscription,
+  Observable,
+  Subscription
 } from 'rxjs';
 
 @Component({
@@ -25,7 +28,10 @@ import {
   templateUrl: './reviews.component.html',
   styleUrls: ['./reviews.component.scss'],
 })
-export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ReviewsComponent implements OnInit, AfterViewInit, OnDestroy {
+  @Select(ReviewState.getReviewList)
+  reviews$!: Observable<Review[]>;
+
   /**
    * MatSort reference
    *
@@ -76,27 +82,26 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
   dateFormat: string = environment.dateFormat;
   pageSizeOptions: number[] = environment.pagination.pageSizes;
 
-  /**
-   * Gathers all the observables to be subscribed
-   *
-   * @private
-   * @type {Subscription}
-   * @memberof ReviewsComponent
-   */
-  private subscriptions: Subscription = Subscription.EMPTY;
+  private _subscriptions: Subscription = new Subscription();
 
   /**
    * Creates an instance of ReviewsComponent.
-   * @param {ReviewService} _reviewService
+   * @param {Store} _store
    * @memberof ReviewsComponent
    */
-  constructor(private readonly _reviewService: ReviewService) {}
+  constructor(private _store: Store) {}
 
   ngOnInit(): void {
-    // TODO: find a better way to update the DataSource.
-    this._reviewService
-      .getAll()
-      .subscribe((reviews: Review[]) => (this.dataSource.data = reviews));
+    this._store.dispatch(new GetReviews());
+
+    this._subscriptions.add(
+      this.reviews$.subscribe(
+        (reviews: Review[]) => (this.dataSource.data = reviews)
+      )
+    );
+  }
+  ngOnDestroy(): void {
+    this._subscriptions.unsubscribe();
   }
 
   ngAfterViewInit() {
@@ -104,10 +109,6 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.dataSource.paginator = this.paginator;
 
     this.listenForSearchFiltering();
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
   }
 
   private listenForSearchFiltering() {

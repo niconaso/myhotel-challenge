@@ -29,6 +29,9 @@
     </div>
   </div>
   <div mat-dialog-actions align="end">
-    <button type="submit" mat-flat-button color="primary" [disabled]="reviewForm.invalid">Submit</button>
+    <button type="submit" mat-flat-button color="primary" [disabled]="reviewForm.invalid">
+      <ng-container *ngIf="editReview">Update</ng-container>
+      <ng-container *ngIf="!editReview">Add</ng-container>
+    </button>
   </div>
 </form>
