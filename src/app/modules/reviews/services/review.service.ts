@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Review } from '@modules/reviews/models';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, take } from 'rxjs';
 import * as uuid from 'uuid';
 
 const ReviewsJsonMockData = require('../../../../assets/mock/reviews.json');
@@ -31,8 +31,7 @@ export class ReviewService {
    * @param {HttpClient} _http
    * @memberof ReviewService
    */
-  constructor(private readonly _http: HttpClient) {
-  }
+  constructor(private readonly _http: HttpClient) {}
 
   /**
    * Creates or Updates the review
@@ -53,7 +52,7 @@ export class ReviewService {
   }
 
   /**
-   * Persists a new review to the database
+   * Persists a new review to the "database"
    *
    * @param {Review} review
    * @return {*}  {Observable<Review>}
@@ -72,12 +71,12 @@ export class ReviewService {
     const reviews: Review[] = [...this._reviewsBS.value, newReview];
     this._reviewsBS.next(reviews);
 
-    // Returns only the created review object
+    // Following the REST practives returns only the update review object
     return of(newReview);
   }
 
   /**
-   * Retrieves all the reviews from the database
+   * Retrieves all the reviews from the "database"
    *
    * @return {*}  {Observable<Review[]>}
    * @memberof ReviewService
@@ -87,6 +86,13 @@ export class ReviewService {
     return this.reviews$;
   }
 
+  /**
+   * Updates an existing review from the "database"
+   *
+   * @param {Review} review
+   * @return {*}  {Observable<Review>}
+   * @memberof ReviewService
+   */
   update(review: Review): Observable<Review> {
     const updatedReview: Review = {
       ...review,
@@ -108,7 +114,25 @@ export class ReviewService {
 
     this._reviewsBS.next(reviews);
 
-    // Returns only the update review object
+    // Following the REST practives returns only the update review object
     return of(updatedReview);
+  }
+
+  /**
+   * Delete a review from the "database"
+   *
+   * @param {Review} deleteReview
+   * @return {*}  {Observable<Review>}
+   * @memberof ReviewService
+   */
+  remove(deleteReview: Review): Observable<Review> {
+    // Remove the review
+    const reviews: Review[] = [...this._reviewsBS.value].filter(
+      (review: Review) => review.id !== deleteReview.id
+    );
+
+    this._reviewsBS.next(reviews);
+
+    return of(deleteReview).pipe(take(1));
   }
 }

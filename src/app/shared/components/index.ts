@@ -1,2 +1,2 @@
-export * from './rating/rating.component';
-export * from './rating-emoji/rating-emoji.component';
+export * from './confirmation-dialog/confirmation-dialog.component'
+export * from './confirmation-dialog/confirmation-dialog-data.interface';

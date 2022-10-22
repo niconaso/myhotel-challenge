@@ -22,8 +22,7 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   displayedColumns: string[] = [
     'number',
-    'firstName',
-    'lastName',
+    'firstAndLastName',
     'email',
     'comments',
     'rating',
