@@ -62,3 +62,8 @@ Como puede verse en el codigo fuente se aplicaron diferentes librerias y concept
 Para poder construir el proyecto para desplegarlo en un servidor es necesario ejecutar `ng build`. Los artefactos del proyectos se crean dentro del directorio `dist/`. 
 
 #### **Aclaración**: En caso de querer probar la app compilada es necesario modificar el endpoint del backend y el que mismo respete la estructura de base de datos definida en `server/db`. A su vez el endpoint del backend debe estar configurado con `CORS` habilitado.
+
+
+# Importante!
+
+En el branch `add-ngxs-management` realicé la integración de [NGXS](https://www.ngxs.io/) a la app. 
