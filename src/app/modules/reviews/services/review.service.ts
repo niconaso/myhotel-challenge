@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Review } from '@modules/reviews/models';
-import { BehaviorSubject, map, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, take, tap } from 'rxjs';
 import * as uuid from 'uuid';
 
 const ReviewsJsonMockData = require('../../../../assets/mock/reviews.json');
@@ -63,9 +63,12 @@ export class ReviewService {
     // Set the ID and Creation Date
     const newReview: Review = {
       ...review,
+      // This is for demo purposes only, the ID and Creation Date should be set in the backend
       id: uuid.v4(),
       createdAt: new Date().getTime(),
     };
+
+    // In case of using a backend uncomment the following line and remove the rest
     // return this._http.post<Review>(this._endpoint, newReview);
 
     // Add new review to the observable
@@ -82,18 +85,11 @@ export class ReviewService {
    * @return {*}  {Observable<Review[]>}
    * @memberof ReviewService
    */
-  getAll(searchTerm?: string): Observable<Review[]> {
-    // return this._http.get<Review[]>(this._endpoint);
-    return this.reviews$.pipe(
-      map((reviews: Review[]) => {
-        if (searchTerm) {
-          return reviews.filter(
-            (review: Review) => review.firstName === searchTerm
-          );
-        }
-        return reviews;
-      })
-    );
+  getAll(): Observable<Review[]> {
+   /*  return this._http.get<Review[]>(this._endpoint).pipe(
+      tap((reviews: Review[])=> this._reviewsBS.next(reviews))
+    ); */
+     return this.reviews$;
   }
 
   /**
