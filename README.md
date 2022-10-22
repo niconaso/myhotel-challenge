@@ -50,6 +50,7 @@ Como puede verse en el codigo fuente se aplicaron diferentes librerias y concept
 * [Bootstrap](https://getbootstrap.com/): Creación de layout y clases utilitarias.
 * [FortAwesome](https://fortawesome.com/): Utilizo Emojis y otras WebFonts.
 * [Ngx-Validators](https://github.com/Nightapes/ngx-validators): Validación de formularios.
+* [Json-Server](https://github.com/typicode/json-server): Para crear una base de datos en memoria que permita ejecutar las acciones del CRUD.
 * RxJs: Para el manejo reactivo de los objetos (Review).
 * ReactiveForms: Para el manejo del formulario de creación/edición de las Reviews.
 * Custom pipes: Para la conversión de los valores del rating de una review a su respectivo Emoji.
