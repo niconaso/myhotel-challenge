@@ -5,6 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { environment } from '@environment/environment';
@@ -19,6 +20,7 @@ import { Subscription } from 'rxjs';
 })
 export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   displayedColumns: string[] = [
     'number',
@@ -32,6 +34,7 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   dataSource: MatTableDataSource<Review> = new MatTableDataSource<Review>();
   dateFormat: string = environment.dateFormat;
+  pageSizeOptions: number[] = environment.pagination.pageSizes;
 
   private subscriptions: Subscription = Subscription.EMPTY;
 
@@ -51,6 +54,7 @@ export class ReviewsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {
