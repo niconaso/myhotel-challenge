@@ -2,23 +2,27 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Review } from '@modules/reviews/models';
-import { BehaviorSubject, Observable, of, take } from 'rxjs';
-import * as uuid from 'uuid';
-
-const ReviewsJsonMockData = require('../../../../assets/mock/reviews.json');
+import { BehaviorSubject, Observable, of, switchMap, take, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ReviewService {
+  /**
+   * BehaviorSubject to manage the reactive states of the Reviews
+   *
+   * @private
+   * @type {BehaviorSubject<Review[]>}
+   * @memberof ReviewService
+   */
   private _reviewsBS: BehaviorSubject<Review[]> = new BehaviorSubject<Review[]>(
-    [...ReviewsJsonMockData]
+    []
   );
 
   private reviews$: Observable<Review[]> = this._reviewsBS.asObservable();
 
   /**
-   *
+   * Reviews endpoint
    *
    * @private
    * @type {string}
@@ -59,20 +63,15 @@ export class ReviewService {
    * @memberof ReviewService
    */
   create(review: Review): Observable<Review> {
-    // Set the ID and Creation Date
-    const newReview: Review = {
-      ...review,
-      id: uuid.v4(),
-      createdAt: new Date().getTime(),
-    };
-    // return this._http.post<Review>(this._endpoint, newReview);
-
-    // Add new review to the observable
-    const reviews: Review[] = [...this._reviewsBS.value, newReview];
-    this._reviewsBS.next(reviews);
-
-    // Following the REST practives returns only the update review object
-    return of(newReview);
+    // Following the REST practices returns only the update review object
+    return this._http.post<Review>(this._endpoint, review).pipe(
+      // Add new review to the observable
+      tap((createdReview: Review) => {
+        const reviews: Review[] = [...this._reviewsBS.value, createdReview];
+        this._reviewsBS.next(reviews);
+      }),
+      take(1)
+    );
   }
 
   /**
@@ -82,8 +81,10 @@ export class ReviewService {
    * @memberof ReviewService
    */
   getAll(): Observable<Review[]> {
-    // return this._http.get<Review[]>(this._endpoint);
-    return this.reviews$;
+    return this._http.get<Review[]>(this._endpoint).pipe(
+      tap((reviews: Review[]) => this._reviewsBS.next(reviews)),
+      switchMap(() => this.reviews$)
+    );
   }
 
   /**
@@ -94,28 +95,25 @@ export class ReviewService {
    * @memberof ReviewService
    */
   update(review: Review): Observable<Review> {
-    const updatedReview: Review = {
-      ...review,
-      updatedAt: new Date().getTime(),
-    };
+    const url: string = `${this._endpoint}/${review.id}`;
 
-    // Update the existing review
-    const reviews: Review[] = [...this._reviewsBS.value].map(
-      (review: Review) => {
-        if (review.id === updatedReview.id) {
-          review = {
-            ...review,
-            ...updatedReview,
-          };
-        }
-        return review;
-      }
+    return this._http.put<Review>(url, review).pipe(
+      tap((updatedReview: Review) => {
+        const reviews: Review[] = [...this._reviewsBS.value].map(
+          (review: Review) => {
+            if (review.id === updatedReview.id) {
+              review = {
+                ...review,
+                ...updatedReview,
+              };
+            }
+            return review;
+          }
+        );
+
+        this._reviewsBS.next(reviews);
+      })
     );
-
-    this._reviewsBS.next(reviews);
-
-    // Following the REST practives returns only the update review object
-    return of(updatedReview);
   }
 
   /**
@@ -125,14 +123,20 @@ export class ReviewService {
    * @return {*}  {Observable<Review>}
    * @memberof ReviewService
    */
-  remove(deleteReview: Review): Observable<Review> {
-    // Remove the review
-    const reviews: Review[] = [...this._reviewsBS.value].filter(
-      (review: Review) => review.id !== deleteReview.id
+  remove(review: Review): Observable<Review> {
+    const { id } = review;
+    const url: string = `${this._endpoint}/${id}`;
+
+    return this._http.delete<Review>(url).pipe(
+      tap(() => {
+        // Remove the review
+        const reviews: Review[] = [...this._reviewsBS.value].filter(
+          (review: Review) => review.id !== id
+        );
+
+        this._reviewsBS.next(reviews);
+      }),
+      take(1)
     );
-
-    this._reviewsBS.next(reviews);
-
-    return of(deleteReview).pipe(take(1));
   }
 }

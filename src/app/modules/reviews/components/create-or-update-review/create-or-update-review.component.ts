@@ -1,10 +1,9 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Review } from '@modules/reviews/models';
 import { ReviewService } from '@modules/reviews/services';
 import { EmailValidators } from 'ngx-validators';
-import { Subscription } from 'rxjs';
 import { CreateOrUpdateReviewData } from './create-or-update-review.interface';
 
 @Component({
@@ -12,10 +11,8 @@ import { CreateOrUpdateReviewData } from './create-or-update-review.interface';
   templateUrl: './create-or-update-review.component.html',
   styleUrls: ['./create-or-update-review.component.scss'],
 })
-export class CreateOrUpdateReviewComponent implements OnInit, OnDestroy {
+export class CreateOrUpdateReviewComponent implements OnInit {
   reviewForm!: FormGroup;
-
-  private _subscriptions: Subscription = Subscription.EMPTY;
 
   /**
    * Creates an instance of CreateOrUpdateReviewComponent.
@@ -34,15 +31,6 @@ export class CreateOrUpdateReviewComponent implements OnInit, OnDestroy {
     this.initForm();
   }
 
-  /**
-   * Unsubscribe from all the observable to avoid memory leaks.
-   *
-   * @memberof CreateOrUpdateReviewComponent
-   */
-  ngOnDestroy(): void {
-    this._subscriptions.unsubscribe();
-  }
-
   async onSubmit(form: FormGroup) {
     if (form.invalid) {
       return;
@@ -53,11 +41,9 @@ export class CreateOrUpdateReviewComponent implements OnInit, OnDestroy {
       ...form.value,
     };
 
-    this._subscriptions.add(
-      this._reviewService
-        .createOrUpdate(review)
-        .subscribe(() => this._matDialogRef.close())
-    );
+    this._reviewService
+      .createOrUpdate(review)
+      .subscribe(() => this._matDialogRef.close());
   }
 
   private initForm() {
@@ -72,6 +58,7 @@ export class CreateOrUpdateReviewComponent implements OnInit, OnDestroy {
       rating: this._fb.control(0, []),
     });
 
+    // If the user is editing a Review then fill the form with the values
     if (this.data) {
       this.reviewForm.patchValue({
         ...this.data.review,
