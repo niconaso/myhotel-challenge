@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  --rating-star-color: #e7b23b;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+
+  &--disabled {
+    opacity: 0.1;
+  }
+
+  &__stars {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__star {
+    font-size: 1.6rem;
+    color: var(--rating-star-color);
+    cursor: pointer;
+  }
+
+  &__summary {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+  }
+}
