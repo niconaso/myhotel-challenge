@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@environment/environment';
 import { Review } from '@modules/reviews/models';
-import { BehaviorSubject, Observable, of, take } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, take } from 'rxjs';
 import * as uuid from 'uuid';
 
 const ReviewsJsonMockData = require('../../../../assets/mock/reviews.json');
@@ -31,7 +31,8 @@ export class ReviewService {
    * @param {HttpClient} _http
    * @memberof ReviewService
    */
-  constructor(private readonly _http: HttpClient) {}
+  constructor(private readonly _http: HttpClient) {
+  }
 
   /**
    * Creates or Updates the review
@@ -81,9 +82,18 @@ export class ReviewService {
    * @return {*}  {Observable<Review[]>}
    * @memberof ReviewService
    */
-  getAll(): Observable<Review[]> {
+  getAll(searchTerm?: string): Observable<Review[]> {
     // return this._http.get<Review[]>(this._endpoint);
-    return this.reviews$;
+    return this.reviews$.pipe(
+      map((reviews: Review[]) => {
+        if (searchTerm) {
+          return reviews.filter(
+            (review: Review) => review.firstName === searchTerm
+          );
+        }
+        return reviews;
+      })
+    );
   }
 
   /**
